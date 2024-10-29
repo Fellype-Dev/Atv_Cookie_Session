@@ -1,4 +1,5 @@
 const fs = require('fs');
+let lista_de_usuarios = [];
 
 function create(array, usuario, senha){
     array.push({
@@ -25,9 +26,17 @@ function login(usuario, senha){
     let array = read("user.json");
     let user = array.find(user => user.usuario == usuario);
 
+    if(user){
+        if(user.senha == senha){
+            return true;
+        }
+    }
+}
+
     module.exports = {
         create,
         update,
         read,
-        save
+        save,
+        login
     };

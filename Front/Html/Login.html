@@ -6,8 +6,48 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Login</h1>
-    <ul>
-        <li></li>
+    <body>
+        <div class="container">
+            <h2>Login</h2>
+            <form id="loginForm" method="POST" action="/login">
+                <div class="form-group">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+            <div id="message"></div> 
+        </div>
+        
+        <script>
+            document.getElementById('loginForm').onsubmit = function(e) {
+                e.preventDefault(); 
+                
+                const formData = new FormData(this);
+                const data = new URLSearchParams(formData);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: data
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Login falhou: ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    document.getElementById('message').innerText = text;
+                    
+                })
+                .catch(error => {
+                    document.getElementById('message').innerText = error.message;
+                });
+            };
+        </script>
 </body>
 </html>
