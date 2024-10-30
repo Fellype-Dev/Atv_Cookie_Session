@@ -1,9 +1,11 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
+const { login } = require('../Controlador/servicos');
 const router = express.Router();
 const usersFilePath = path.join(__dirname, '..', 'Dados', 'user.json');
+
+router.use(express.json());
 
 router.post('/', (req, res) => {
     const { usuario, senha } = req.body; 
@@ -25,6 +27,7 @@ router.post('/', (req, res) => {
         const usuarioEncontrado = usuarios.find(u => u.usuario === usuario && u.senha === senha);
 
         if (usuarioEncontrado) {
+            req.session.loggedIn = true;
             res.send('Login bem-sucedido!'); 
         } else {
             res.status(401).send('Usuário ou senha inválidos.'); 

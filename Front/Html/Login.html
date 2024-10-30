@@ -1,53 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="Css/Login.css">
+    <link rel="icon" href="../Fotos/Hypixel.png" type="image/png">
 </head>
 <body>
-    <body>
-        <div class="container">
-            <h2>Login</h2>
-            <form id="loginForm" method="POST" action="/login">
-                <div class="form-group">
-                    <label for="username">Usuário:</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Senha:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit">Entrar</button>
-            </form>
-            <div id="message"></div> 
-        </div>
+    <div class="container">
+        <img src="../Fotos/Hypixel.png" alt="Hypixel" class="logo">
+        <form id="loginForm">
+            <input type="text" name="usuario" placeholder="Usuário" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button type="submit">Login</button>
+        </form>
+        <div id="notification" style="color: red;"></div>
+        <button id="registerButton">Registre-se</button> 
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const registerButton = document.getElementById('registerButton');
         
-        <script>
-            document.getElementById('loginForm').onsubmit = function(e) {
-                e.preventDefault(); 
-                
-                const formData = new FormData(this);
-                const data = new URLSearchParams(formData);
-                
-                fetch(this.action, {
-                    method: 'POST',
-                    body: data
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Login falhou: ' + response.statusText);
-                    }
-                    return response.text();
-                })
-                .then(text => {
-                    document.getElementById('message').innerText = text;
-                    
-                })
-                .catch(error => {
-                    document.getElementById('message').innerText = error.message;
-                });
-            };
-        </script>
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            const notificationDiv = document.getElementById('notification');
+
+            if (result.success) {
+                window.location.href = '/home';
+            } else {
+                notificationDiv.textContent = result.message; 
+            }
+        });
+
+        registerButton.addEventListener('click', () => {
+            window.location.href = '/register';
+        });
+    </script>
 </body>
 </html>

@@ -1,23 +1,24 @@
 const express = require('express');
-const app = express();
-
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-app.use(cookieParser());
-app.use(session
-    ({
+function authMiddleware(req, res, next) {
+    if (req.session.loggedIn) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
+function setupMiddleware(app) {
+    app.use(cookieParser());
+    app.use(session({
         secret: '123',
         resave: true,
         saveUninitialized: true
     }));
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+}
 
-app.use('/register', (req, res, next) => {
-    console.log('Usuario cadastrado');
-    next();
-});
-
-app.use('/login', (req, res, next) => {
-    console.log('Usuario logado');
-    next();
-});
+module.exports = { authMiddleware, setupMiddleware };

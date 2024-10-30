@@ -1,16 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Página Inicial</title>
+    <link rel="stylesheet" type="text/css" href="Css/Home.css">
+    <link rel="icon" href="../Fotos/Hypixel.png" type="image/png">
 </head>
 <body>
+    <div class="container">
+        <header class="header">
+            <img src="../Fotos/Hypixel.png" alt="Hypixel" class="logo"/>
+            <h1>Replays do Minecraft - Bedwars</h1>
+            <form id="logoutForm" method="POST" action="/logout">
+                <button type="submit" class="logout-button">Deslogar</button>
+            </form>
+        </header>
 
-    <h1>Bem-vindo!</h1>
-    <a href="/register">Ir para página de cadastro</a>
+        <div class="replay-card">
+            <iframe 
+                class="video" 
+                src="https://www.youtube.com/embed/o_BW8UEm64Q" 
+                title="Replay 1" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+            <h2>Replay 1</h2>
+        </div>
+
+        <div class="replay-card">
+            <iframe 
+                class="video" 
+                src="https://www.youtube.com/embed/UcLBJbGp2JM" 
+                title="Replay 2" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+            <h2>Replay 2</h2>
+        </div>
+
+        <div class="replay-card">
+            <iframe 
+                class="video" 
+                src="https://www.youtube.com/embed/LDO3gWvHtTs" 
+                title="Replay 3" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+            <h2>Replay 3</h2>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 Hypixel. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <div id="cookieConsent" class="cookie-consent">
+        <p>Este site usa cookies para garantir que você tenha a melhor experiência. Ao continuar navegando, você concorda com a nossa <a href="/politica-de-cookies">política de cookies</a>.</p>
+        <button id="acceptCookies">Aceitar</button>
+    </div>
+
+    <script>
+        const logoutForm = document.getElementById('logoutForm');
+        logoutForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const response = await fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = '/';
+            }
+        });
+
+        document.getElementById('acceptCookies').addEventListener('click', function() {
+            document.getElementById('cookieConsent').style.display = 'none';
+            document.cookie = "cookiesAccepted=true; max-age=31536000; path=/";
+        });
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('cookiesAccepted='))) {
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+    </script>
     
-    <a href="/login">Ir para página de login</a>
-
 </body>
 </html>
